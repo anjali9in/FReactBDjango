@@ -4,6 +4,6 @@ from api.views import CreateUserView
 from . import views
 
 urlpatterns = [
-    path('notes/', views.NoteListCreateView.as_view(), name='notes_list'),
-    path('notes/delete/', views.NoteDeleteView.as_view(), name='notes_delete'),
+    path('notes/', views.NoteListCreate.as_view(), name='notes_list'),
+    path('notes/delete/<int:pk>/', views.NoteDelete.as_view(), name='notes_delete'),
 ]
