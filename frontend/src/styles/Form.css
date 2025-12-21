@@ -80,7 +80,7 @@ body {
 
 .input-form {
     position: relative;
-    width: 100%;
+    width: calc(100% - 30px);
     margin: 12px 0;
     padding: 12px 14px;
     border-radius: 12px;
