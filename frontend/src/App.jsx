@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes, } from "react-router-dom"
-import './App.css'
 import ProtectedRoute from './components/ProtectedRoute';
 import { Home } from './pages/Home';
 import { Register } from './pages/Register';

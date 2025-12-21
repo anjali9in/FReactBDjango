@@ -4,8 +4,8 @@ import { Form } from '../components/Form'
 export const Login = () => {
     return (
         <Form
-            route="/api/user/login"
-            method={"Login"}
+            route="/api/token/"
+            method={"login"}
         />
     )
 }

@@ -2,22 +2,39 @@ import React, { useState } from 'react'
 import api from '../api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Form.css';
 
 export const Form = ({ route, method }) => {
 
-    const [userName, setUserName] = useState();
-    const [password, setPassword] = useState();
-    const [loading, setLoading] = useState();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const [errorMsg, setErrorMsg] = useState("");
     const navigate = useNavigate();
 
     const name = method === "login" ? "Login" : "Register";
 
+    const errorObjectToString = (errorObj) => {
+        if (!errorObj || typeof errorObj !== "object") return "";
+
+        return Object.entries(errorObj)
+            .map(([field, messages]) => {
+                if (Array.isArray(messages)) {
+                    return `${field}: ${messages.join(", ")}`;
+                }
+                return `${field}: ${messages}`;
+            })
+            .join(" | ");
+    };
+
     const submitHandler = async (e) => {
         setLoading(true);
         e.preventDefault();
-
+        let response;
         try {
-            const response = await api.post(route, { userName, password })
+            response = await api.post(route, { username, password })
+
             if (response) {
                 if (method === "login") {
                     localStorage.setItem(ACCESS_TOKEN, response.data.access)
@@ -28,7 +45,19 @@ export const Form = ({ route, method }) => {
                 }
             }
         } catch (error) {
-            alert(error)
+            if (error?.response?.data) {
+                const errorResponse = error?.response?.data ?? [];
+                console.log("errorResponse:", errorResponse)
+                let msg;
+                if (typeof errorResponse.detail === "string") {
+                    msg = errorResponse.detail;
+                }
+                if (typeof errorResponse === "object") {
+                    msg = errorObjectToString(errorResponse)
+                }
+                setErrorMsg(msg);
+            }
+            // alert(error);
         } finally {
             setLoading(false)
         }
@@ -40,8 +69,8 @@ export const Form = ({ route, method }) => {
             <input
                 className='input-form'
                 type='text'
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 placeholder='Username'
             />
             <input
@@ -51,7 +80,8 @@ export const Form = ({ route, method }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder='Password'
             />
-            <button type={"submit"} onClick={"button-sumit-form"}>
+            {errorMsg && <div className='error-red-line'>{errorMsg}</div>}
+            <button type={"submit"} className='button-submit-form' disabled={loading}>
                 {name}
             </button>
         </form>
