@@ -12,9 +12,21 @@
     --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
 }
 
+button {
+    border: 1px solid rgba(219, 42, 42, 0.45);
+    background: rgba(160, 167, 229, 0.48);
+    color: rgba(108, 43, 43, 0.92);
+    font-weight: 650;
+    padding: 10px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+
 /* Page background */
 .home-page-wrapper {
     min-height: 100vh;
+    width: 100%;
     padding: 26px 18px 40px;
     color: var(--text);
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
@@ -92,6 +104,27 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.home-body-container .note-head-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-direction: row;
+}
+
+.home-body-container .note-head-container .create-note-btn {
+    padding: 6px 12px;
+}
+
+.home-body-container .note-head-container .create-note-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.18);
+}
+
+.home-body-container .note-head-container .create-note-btn:active {
+    transform: translateY(0);
+}
+
 /* Notes heading */
 .home-body-container h2 {
     margin: 0 0 14px;
@@ -107,7 +140,8 @@
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 14px 35px rgba(0, 0, 0, 0.35);
-    padding: 18px;
+    padding: 10px;
+    margin-bottom: 6px;
 }
 
 /* Create Notes title */
@@ -214,4 +248,36 @@
     .notes-container {
         padding: 14px;
     }
+}
+
+.notes-container.note {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.notes-container.note .title-content-wrap .content {
+    border-radius: 16px;
+    background: rgba(193, 116, 116, 0.164);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.35);
+    padding: 10px;
+    font-size: 12px;
+}
+
+.notes-container.note .delete-note-btn {
+    padding: 6px 10px;
+}
+
+.notes-container.note .delete-note-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.18);
+}
+
+.notes-container.note .date-btn-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-direction: row;
 }

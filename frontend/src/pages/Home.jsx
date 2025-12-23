@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import api from '../api';
 import '../styles/Home.css';
+import Note from '../components/Note';
 
-export const Home = ({ pageTitle }) => {
+export const Home = () => {
     const [notes, setNotes] = useState([])
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [statusMsg, setStatusMsg] = useState("");
+    const [createNotes, setCreateNotes] = useState(false);
 
     useEffect(() => {
         getNotes()
@@ -15,7 +17,10 @@ export const Home = ({ pageTitle }) => {
     const getNotes = () => {
         api.get("/api/notes")
             .then(res => res.data)
-            .catch(err => alert(err))
+            .then(data => {
+                setNotes(data)
+            })
+            .catch(err => setStatusMsg("error occured", err))
     }
 
     const deleteNotes = (id) => {
@@ -28,13 +33,15 @@ export const Home = ({ pageTitle }) => {
         })
     }
 
-    const createNotes = (e) => {
+    const createNotesHandler = (e) => {
+        e.preventDefault();
         api.post("/api/notes/",
             { content, title }).then((res) => {
 
             })
 
         getNotes();
+        setCreateNotes(false);
     }
 
     const logoutHandler = () => {
@@ -46,7 +53,6 @@ export const Home = ({ pageTitle }) => {
             <div className='header-container'>
                 <div className='left-header-wrap'>
                     <h1>Home</h1>
-                    <div>{pageTitle}</div>
                 </div>
                 <div className='right-header-wrap'>
                     <button className={"logout-btn"} onClick={logoutHandler}>
@@ -55,11 +61,27 @@ export const Home = ({ pageTitle }) => {
                 </div>
             </div>
             <div className='home-body-container'>
-                <div><h2>Notes</h2></div>
-                <div className='notes-container'>
-                    <h3>Create Notes</h3>
-                    <form onSubmit={createNotes}>
-                        <label>Title:</label>
+                <div>
+                    <div className='note-head-container'>
+                        <h2>Notes</h2>
+                        <button className={"create-note-btn"} onClick={() => setCreateNotes(true)}>
+                            CREATE NOTES
+                        </button>
+                    </div>
+
+                    {notes?.map(note => {
+                        return <Note
+                            key={note.id}
+                            note={note}
+                            onDelete={() => deleteNotes(note.id)}
+                        />
+                    })}
+                </div>
+                <div>{statusMsg}</div>
+                {createNotes && <div className='notes-container'>
+                    <h3>New Notes</h3>
+                    <form onSubmit={createNotesHandler}>
+                        <label htmlFor='title'>Title:</label>
                         <input
                             type={'text'}
                             id={"title-notes"}
@@ -68,7 +90,7 @@ export const Home = ({ pageTitle }) => {
                             onChange={(e) => setTitle(e.target.value)}
                             value={title}
                         />
-                        <label>Content:</label>
+                        <label htmlFor='content'>Content:</label>
                         <textarea
                             id={`text-content-area`}
                             name='content'
@@ -78,7 +100,7 @@ export const Home = ({ pageTitle }) => {
                         ></textarea>
                         <input type="submit" value={"Submit"}></input>
                     </form>
-                </div>
+                </div>}
             </div>
         </div>
     )
