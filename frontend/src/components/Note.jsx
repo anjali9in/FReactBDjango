@@ -10,7 +10,7 @@ const Note = ({ note, onDelete }) => {
                 <p className='content'>{note.content}</p>
             </div>
             <div className='date-btn-wrap'>
-                <div>{formattedDate}</div>
+                <div className='date-ui'>{formattedDate}</div>
                 <button className='delete-note-btn' onClick={onDelete}>DELETE</button>
             </div>
         </div>

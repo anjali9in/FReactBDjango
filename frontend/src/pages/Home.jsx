@@ -24,9 +24,15 @@ export const Home = () => {
     }
 
     const deleteNotes = (id) => {
-        api.delete(`/api/notes/delete/${id}`).then(res => {
+        api.delete(`/api/notes/delete/${id}/`).then(res => {
             if (res.status == 204) {
                 setStatusMsg("Note deleted.")
+                setNotes((prevNotes) =>
+                    prevNotes.filter(note => note.id !== id)
+                );
+                setTimeout(() => {
+                    setStatusMsg("");
+                }, 1000)
             } else {
                 setStatusMsg("Failed to delete note.")
             }
@@ -62,13 +68,16 @@ export const Home = () => {
             </div>
             <div className='home-body-container'>
                 <div>
+                    {statusMsg &&
+                        statusMsg !== "" &&
+                        <div className='status-alert'>{statusMsg}</div>
+                    }
                     <div className='note-head-container'>
                         <h2>Notes</h2>
                         <button className={"create-note-btn"} onClick={() => setCreateNotes(true)}>
                             CREATE NOTES
                         </button>
                     </div>
-
                     {notes?.map(note => {
                         return <Note
                             key={note.id}
@@ -77,7 +86,6 @@ export const Home = () => {
                         />
                     })}
                 </div>
-                <div>{statusMsg}</div>
                 {createNotes && <div className='notes-container'>
                     <h3>New Notes</h3>
                     <form onSubmit={createNotesHandler}>
